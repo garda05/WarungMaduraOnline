@@ -1,3 +1,75 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* ====== CUSTOM COLOR PALETTE ====== */
+:root {
+    --dark: #222831;
+    --dark-secondary: #393E46;
+    --primary: #00ADB5;
+    --light: #EEEEEE;
+}
+
+/* ====== GLOBAL ====== */
+body {
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+/* ====== NAVBAR ====== */
+.navbar {
+    background-color: var(--dark-secondary);
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+    color: var(--light) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary) !important;
+}
+
+/* ====== CARD ====== */
+.card {
+    background-color: var(--dark-secondary);
+    border: none;
+    color: var(--light);
+}
+
+/* ====== BUTTON ====== */
+.btn-primary {
+    background-color: var(--primary);
+    border: none;
+    color: #222831;
+}
+
+.btn-primary:hover {
+    background-color: #019ca3;
+}
+
+/* ====== TABLE ====== */
+.table {
+    color: var(--light);
+}
+
+.table thead {
+    background-color: var(--dark);
+    color: var(--primary);
+}
+
+/* ====== FORM ====== */
+.form-control {
+    background-color: var(--dark);
+    color: var(--light);
+    border: 1px solid #555;
+}
+
+.form-control:focus {
+    background-color: var(--dark);
+    color: var(--light);
+    border-color: var(--primary);
+    box-shadow: none;
+}
