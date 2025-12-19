@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\BarangController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BarangController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,13 +15,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 /**
- * Profile (semua user yang login)
+ * Semua fitur setelah login
  */
 Route::middleware('auth')->group(function () {
-// Semua fitur setelah login
-Route::middleware(['auth'])->group(function () {
 
-    // CRUD BARANG
+    // CRUD BARANG (kalau memang semua user boleh akses)
     Route::resource('barang', BarangController::class);
 
     // PROFILE
@@ -50,7 +47,7 @@ Route::middleware(['auth', 'role:penjual'])->group(function () {
 });
 
 /**
- * PELANGGAN routes (placeholder dulu, nanti cart/order/tracking kamu/temenmu isi)
+ * PELANGGAN routes (placeholder)
  */
 Route::middleware(['auth', 'role:pelanggan'])->group(function () {
     // Route::get('/cart', ...);
