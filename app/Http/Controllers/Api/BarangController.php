@@ -40,4 +40,59 @@ class BarangController extends Controller
             'data' => $barang
         ], 200);
     }
+
+    /**
+     * Menyimpan barang baru (dummy)
+     */
+    public function store(Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => 'Barang berhasil ditambahkan',
+            'data' => $request->all()
+        ], 201);
+    }
+
+    /**
+     * Menampilkan detail barang (dummy)
+     */
+    public function show($id)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail barang',
+            'data' => [
+                'id' => $id,
+                'nama_barang' => 'Contoh Barang',
+                'harga' => 10000,
+                'stok' => 5
+            ]
+        ], 200);
+    }
+
+    /**
+     * Update barang (dummy)
+     */
+    public function update(Request $request, $id)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => 'Barang berhasil diupdate',
+            'data' => [
+                'id' => $id,
+                'data_baru' => $request->all()
+            ]
+        ], 200);
+    }
+
+    /**
+     * Hapus barang (dummy)
+     */
+    public function destroy($id)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => "Barang dengan ID $id berhasil dihapus"
+        ], 200);
+    }
 }
