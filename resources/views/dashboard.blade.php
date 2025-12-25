@@ -56,71 +56,74 @@
             </div>
 
             <!-- PRODUK -->
-            <div>
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold">Produk Unggulan</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
 
-                    @if (auth()->user()->isPenjual())
-                        <a href="{{ route('barang.index') }}" class="text-[#CC561E] font-semibold hover:underline">
-                            Kelola Produk →
-                        </a>
-                    @endif
-                </div>
+                @forelse($barangs as $barang)
+                    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden relative">
 
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                        <!-- FOTO -->
+                        @if ($barang->foto)
+                            <img src="{{ asset('storage/' . $barang->foto) }}" class="w-full h-48 object-cover">
+                        @else
+                            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                <span class="text-4xl">📦</span>
+                            </div>
+                        @endif
 
-                    @forelse($barangs as $barang)
-                        <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden relative">
+                        <!-- BODY -->
+                        <div class="p-4">
+                            <h3 class="font-semibold text-sm truncate">
+                                {{ $barang->nama_barang }}
+                            </h3>
 
-                            <!-- FOTO -->
-                            @if ($barang->foto)
-                                <img src="{{ asset('storage/' . $barang->foto) }}" class="w-full h-48 object-cover">
-                            @else
-                                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                    <span class="text-4xl">📦</span>
-                                </div>
-                            @endif
+                            <p class="text-[#CC561E] font-bold mt-2 mb-1">
+                                Rp {{ number_format($barang->harga, 0, ',', '.') }}
+                            </p>
 
-                            <!-- BADGE -->
-                            @if ($barang->stok > 10)
-                                <span
-                                    class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded font-bold">
-                                    FRESH
-                                </span>
-                            @endif
+                            <p class="text-xs text-gray-500 mb-1">
+                                {{ Str::limit($barang->deskripsi, 50) }}
+                            </p>
 
-                            <!-- BODY -->
-                            <div class="p-4">
-                                <h3 class="font-semibold text-sm truncate">{{ $barang->nama_barang }}</h3>
+                            <p class="text-xs text-gray-500 mb-4">
+                                Stok: {{ $barang->stok }}
+                            </p>
 
-                                <div class="flex items-center gap-1 text-sm text-gray-500 mt-1">
-                                    ⭐ 4.{{ rand(5, 9) }} • {{ rand(10, 200) }} terjual
-                                </div>
-
-                                <p class="text-[#CC561E] font-bold mt-2">
-                                    Rp {{ number_format($barang->harga, 0, ',', '.') }}
-                                </p>
-
-                                <p class="text-xs text-gray-500 mt-1 mb-4">
-                                    {{ Str::limit($barang->deskripsi, 50) }}
-                                </p>
-
-                                <!-- ACTION -->
-                                @if (auth()->user()->isPembeli())
+                            <!-- ACTION -->
+                            @if (auth()->user()->role === 'pembeli')
+                                @if ($barang->stok > 0)
+                                    <form action="{{ route('keranjang.tambah', $barang->id) }}" method="POST">
+                                        @csrf
+                                        <button
+                                            class="w-full border border-green-500 text-green-600 rounded-lg py-2 text-sm font-semibold
+                       hover:bg-green-50 transition">
+                                            + Keranjang
+                                        </button>
+                                    </form>
+                                @else
                                     <button
-                                        class="w-full border border-green-500 text-green-600 rounded-lg py-2 text-sm font-semibold hover:bg-green-50 transition">
-                                        + Keranjang
+                                        class="w-full bg-gray-300 text-gray-500 rounded-lg py-2 text-sm cursor-not-allowed">
+                                        Stok Habis
                                     </button>
                                 @endif
-                            </div>
-                        </div>
-                    @empty
-                        <div class="col-span-full text-center py-12 text-gray-500">
-                            Belum ada produk
-                        </div>
-                    @endforelse
+                            @endif
 
-                </div>
+                            {{-- @if (auth()->user()->role === 'pembeli')
+                                <form action="{{ route('keranjang.tambah', $barang->id) }}" method="POST">
+                                    @csrf
+                                    <button
+                                        class="w-full bg-black text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-800 transition">
+                                        + Keranjang
+                                    </button>
+                                </form>
+                            @endif --}}
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-span-full text-center py-12 text-gray-500">
+                        Belum ada produk
+                    </div>
+                @endforelse
+
             </div>
 
         </div>

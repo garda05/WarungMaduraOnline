@@ -1,99 +1,87 @@
 <x-app-layout>
-    <div class="max-w-6xl mx-auto py-10 px-4">
+    <div class="max-w-6xl mx-auto px-4">
 
-        {{-- Header kanan: tombol tambah (SATU AJA) --}}
-        <div class="flex justify-end mb-6">
+        <!-- Header -->
+        <div class="flex justify-end mb-4">
             <a href="{{ route('barang.create') }}"
-               class="bg-[#CC561E] hover:bg-[#b74c1a] text-white px-4 py-2 rounded-lg shadow">
+               class="bg-black text-white px-4 py-2 rounded text-sm hover:bg-gray-800">
                 + Tambah Produk
             </a>
         </div>
 
-        {{-- Jika belum ada produk --}}
-        @if($barangs->isEmpty())
-            <div class="bg-white rounded-xl shadow p-10 text-center">
-                <div class="text-6xl mb-4">📦</div>
-                <h2 class="text-xl font-semibold mb-2">
-                    Belum ada produk
-                </h2>
-                <p class="text-gray-500">
-                    Produk yang kamu tambahkan akan muncul di sini.
-                </p>
-            </div>
-        @else
-            {{-- Table --}}
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <table class="w-full text-sm">
-                    <thead class="bg-gray-100 text-gray-600">
-                        <tr>
-                            <th class="px-4 py-3 text-left">Foto</th>
-                            <th class="px-4 py-3 text-left">Nama</th>
-                            <th class="px-4 py-3 text-left">Harga</th>
-                            <th class="px-4 py-3 text-left">Stok</th>
-                            <th class="px-4 py-3 text-center">Aksi</th>
+        <!-- Table -->
+        <div class="bg-white shadow rounded-lg overflow-x-auto">
+            <table class="w-full border-collapse">
+                <thead class="bg-gray-100 text-left text-sm">
+                    <tr>
+                        <th class="p-3">Foto</th>
+                        <th class="p-3">Nama</th>
+                        <th class="p-3">Deskripsi</th>
+                        <th class="p-3">Harga</th>
+                        <th class="p-3">Stok</th>
+                        <th class="p-3 text-center">Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody class="text-sm">
+                    @forelse($barangs as $barang)
+                        <tr class="border-t">
+                            <td class="p-3">
+                                @if ($barang->foto)
+                                    <img src="{{ asset('storage/' . $barang->foto) }}"
+                                         class="h-14 w-14 object-cover rounded">
+                                @else
+                                    <div class="h-14 w-14 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
+                                        No Image
+                                    </div>
+                                @endif
+                            </td>
+
+                            <td class="p-3 font-medium">
+                                {{ $barang->nama_barang }}
+                            </td>
+
+                            <td class="p-3 text-gray-600">
+                                {{ \Illuminate\Support\Str::limit($barang->deskripsi, 50, '...') }}
+                            </td>
+
+                            <td class="p-3">
+                                Rp {{ number_format($barang->harga, 0, ',', '.') }}
+                            </td>
+
+                            <td class="p-3">
+                                {{ $barang->stok }}
+                            </td>
+
+                            <td class="p-3">
+                                <div class="flex justify-center gap-3">
+                                    <a href="{{ route('barang.edit', $barang->id) }}"
+                                       class="text-blue-600 hover:underline">
+                                        Edit
+                                    </a>
+
+                                    <form action="{{ route('barang.destroy', $barang->id) }}"
+                                          method="POST"
+                                          onsubmit="return confirm('Yakin hapus produk?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="text-red-600 hover:underline">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody class="divide-y">
-                        @foreach($barangs as $barang)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3">
-                                    @if($barang->foto)
-                                        <img src="{{ asset('storage/'.$barang->foto) }}"
-                                             class="h-12 w-12 object-cover rounded-lg">
-                                    @else
-                                        <div class="h-12 w-12 flex items-center justify-center bg-gray-200 rounded-lg">
-                                            📷
-                                        </div>
-                                    @endif
-                                </td>
-
-                                <td class="px-4 py-3 font-medium">
-                                    {{ $barang->nama_barang }}
-                                    <div class="text-xs text-gray-500">
-                                        {{ ucfirst($barang->kategori) }}
-                                    </div>
-                                </td>
-
-                                <td class="px-4 py-3">
-                                    Rp {{ number_format($barang->harga, 0, ',', '.') }}
-                                </td>
-
-                                <td class="px-4 py-3">
-                                    @if($barang->stok > 0)
-                                        <span class="text-green-600 font-semibold">
-                                            {{ $barang->stok }}
-                                        </span>
-                                    @else
-                                        <span class="text-red-500 font-semibold">
-                                            Habis
-                                        </span>
-                                    @endif
-                                </td>
-
-                                <td class="px-4 py-3 text-center">
-                                    <div class="flex justify-center gap-3">
-                                        <a href="{{ route('barang.edit', $barang) }}"
-                                           class="text-blue-600 hover:underline">
-                                            Edit
-                                        </a>
-
-                                        <form method="POST"
-                                              action="{{ route('barang.destroy', $barang) }}"
-                                              onsubmit="return confirm('Yakin hapus produk ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="text-red-600 hover:underline">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
+                    @empty
+                        <tr>
+                            <td colspan="6" class="p-6 text-center text-gray-500">
+                                Belum ada produk
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
     </div>
 </x-app-layout>
