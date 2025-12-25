@@ -1,3 +1,318 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ========================================
+   WARUNG MADURA ONLINE - CUSTOM STYLES
+   ======================================== */
+
+/* Base Colors */
+:root {
+    --color-primary: #CC561E;
+    --color-secondary: #F3CF7A;
+    --color-background: #FAFAF9;
+    --color-white: #FFFFFF;
+}
+
+/* Base Layout */
+body {
+    background: var(--color-background);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Page Containers */
+.page-container {
+    position: relative;
+    width: 100%;
+    min-height: 820px;
+    background: var(--color-background);
+}
+
+/* Login Page */
+.login-page {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    min-height: 820px;
+    background: linear-gradient(
+        135deg,
+        rgba(243, 207, 122, 0.1) 0%,
+        #FFFFFF 50%,
+        rgba(204, 86, 30, 0.05) 100%
+    ),
+    #FAFAF9;
+}
+
+.login-card {
+    background: white;
+    border-radius: 24px;
+    padding: 48px;
+    box-shadow: 0 10px 40px rgba(204, 86, 30, 0.08);
+    max-width: 480px;
+    width: 100%;
+}
+
+/* Beranda/Home Page */
+.beranda-page {
+    position: relative;
+    width: 100%;
+    min-height: 2036px;
+    background: var(--color-background);
+}
+
+/* Keranjang Page */
+.keranjang-page {
+    position: relative;
+    width: 100%;
+    min-height: 820px;
+    background: var(--color-background);
+}
+
+/* Pesanan Page */
+.pesanan-page {
+    position: relative;
+    width: 100%;
+    min-height: 820px;
+    background: var(--color-background);
+}
+
+/* Chat Page */
+.chat-page {
+    position: relative;
+    width: 100%;
+    min-height: 820px;
+    background: var(--color-background);
+}
+
+/* ========================================
+   COMPONENTS
+   ======================================== */
+
+/* Buttons */
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: #A84518;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(204, 86, 30, 0.2);
+}
+
+.btn-secondary {
+    background: var(--color-secondary);
+    color: #333;
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #E6C06D;
+    transform: translateY(-2px);
+}
+
+/* Cards */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+}
+
+/* Product Card */
+.product-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-card-body {
+    padding: 16px;
+}
+
+.product-title {
+    font-weight: 600;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.product-price {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--color-primary);
+}
+
+/* Navigation */
+.nav-custom {
+    background: white;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    padding: 16px 0;
+}
+
+.nav-link-custom {
+    color: #666;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-link-custom:hover {
+    background: rgba(204, 86, 30, 0.1);
+    color: var(--color-primary);
+}
+
+.nav-link-custom.active {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Forms */
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(204, 86, 30, 0.1);
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Header */
+.page-header {
+    background: white;
+    padding: 24px 0;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Cart Badge */
+.cart-badge {
+    background: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}
+
+/* Chat Bubble */
+.chat-bubble {
+    background: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.chat-bubble.sender {
+    background: var(--color-primary);
+    color: white;
+    margin-left: auto;
+}
+
+/* Order Status */
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-badge.pending {
+    background: rgba(243, 207, 122, 0.2);
+    color: #B8860B;
+}
+
+.status-badge.processing {
+    background: rgba(59, 130, 246, 0.2);
+    color: #1E40AF;
+}
+
+.status-badge.completed {
+    background: rgba(34, 197, 94, 0.2);
+    color: #166534;
+}
+
+.status-badge.cancelled {
+    background: rgba(239, 68, 68, 0.2);
+    color: #991B1B;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 32px;
+        margin: 16px;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .product-card img {
+        height: 160px;
+    }
+}
