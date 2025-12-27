@@ -13,31 +13,25 @@ class KeranjangController extends Controller
         return view('keranjang.index', compact('keranjang'));
     }
 
-    public function tambah(Barang $barang)
+    public function tambah(Request $request, Barang $barang)
     {
-        $keranjang = session()->get('keranjang', []);
+        $qty = (int) $request->qty;
 
-        // kalau stok 0, langsung stop
-        if ($barang->stok <= 0) {
-            return back()->with('error', 'Stok barang habis');
+        // validasi stok
+        if ($qty > $barang->stok) {
+            return back()->with('error', 'Qty melebihi stok');
         }
 
+        $keranjang = session()->get('keranjang', []);
+
         if (isset($keranjang[$barang->id])) {
-
-            // 🔒 LIMIT SESUAI STOK
-            if ($keranjang[$barang->id]['qty'] >= $barang->stok) {
-                return back()->with('error', 'Jumlah melebihi stok tersedia');
-            }
-
-            $keranjang[$barang->id]['qty']++;
-
+            $keranjang[$barang->id]['qty'] += $qty;
         } else {
             $keranjang[$barang->id] = [
-                'nama'  => $barang->nama_barang,
-                'harga'=> $barang->harga,
+                'nama' => $barang->nama_barang,
+                'harga' => $barang->harga,
                 'foto' => $barang->foto,
-                'qty'  => 1,
-                'stok' => $barang->stok, // simpan stok buat validasi UI
+                'qty' => $qty,
             ];
         }
 
