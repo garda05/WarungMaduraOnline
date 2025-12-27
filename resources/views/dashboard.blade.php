@@ -89,7 +89,50 @@
                             </p>
 
                             <!-- ACTION -->
-                            @if (auth()->user()->role === 'pembeli')
+                            @if ($barang->stok > 0 && auth()->user()->role === 'pembeli')
+                                <div class="relative">
+
+                                    <!-- QTY CONTROL (KECIL DI POJOK KANAN ATAS) -->
+                                    <div
+                                        class="absolute -top-6 right-0 flex items-center gap-1
+                    bg-white border rounded-full px-2 py-m0.5 shadow text-xs">
+
+                                        <button type="button" onclick="kurangQty({{ $barang->id }})"
+                                            class="px-1 text-gray-600 hover:text-black">
+                                            −
+                                        </button>
+
+                                        <input id="qty-{{ $barang->id }}" type="text" value="1" readonly
+                                            class="w-5 text-center text-xs border-0 focus:ring-0 p-0">
+
+                                        <button type="button"
+                                            onclick="tambahQty({{ $barang->id }}, {{ $barang->stok }})"
+                                            class="px-1 text-gray-600 hover:text-black">
+                                            +
+                                        </button>
+                                    </div>
+
+                                    <!-- BUTTON KERANJANG -->
+                                    <form action="{{ route('keranjang.tambah', $barang->id) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="qty" id="qty-hidden-{{ $barang->id }}"
+                                            value="1">
+
+                                        <button onclick="syncQty({{ $barang->id }})"
+                                            class="w-full border border-green-500 text-green-600 rounded-lg py-2
+                       text-sm font-semibold hover:bg-green-50 transition">
+                                            + Keranjang
+                                        </button>
+                                    </form>
+                                </div>
+                            @elseif ($barang->stok == 0)
+                                <button
+                                    class="w-full bg-gray-300 text-gray-500 rounded-lg py-2 text-sm cursor-not-allowed">
+                                    Stok Habis
+                                </button>
+                            @endif
+
+                            {{-- @if (auth()->user()->role === 'pembeli')
                                 @if ($barang->stok > 0)
                                     <form action="{{ route('keranjang.tambah', $barang->id) }}" method="POST">
                                         @csrf
@@ -105,17 +148,8 @@
                                         Stok Habis
                                     </button>
                                 @endif
-                            @endif
-
-                            {{-- @if (auth()->user()->role === 'pembeli')
-                                <form action="{{ route('keranjang.tambah', $barang->id) }}" method="POST">
-                                    @csrf
-                                    <button
-                                        class="w-full bg-black text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-800 transition">
-                                        + Keranjang
-                                    </button>
-                                </form>
                             @endif --}}
+
                         </div>
                     </div>
                 @empty
@@ -129,3 +163,26 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    function tambahQty(id, stok) {
+        const input = document.getElementById(`qty-${id}`);
+        let value = parseInt(input.value);
+        if (value < stok) {
+            input.value = value + 1;
+        }
+    }
+
+    function kurangQty(id) {
+        const input = document.getElementById(`qty-${id}`);
+        let value = parseInt(input.value);
+        if (value > 1) {
+            input.value = value - 1;
+        }
+    }
+
+    function syncQty(id) {
+        document.getElementById(`qty-hidden-${id}`).value =
+            document.getElementById(`qty-${id}`).value;
+    }
+</script>
