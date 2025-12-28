@@ -2,7 +2,7 @@
     <div class="max-w-6xl mx-auto px-4">
 
         <!-- Header -->
-        <div class="flex justify-end mt-4mb-4">
+        <div class="flex justify-end mt-4 mb-4">
             <a href="{{ route('barang.create') }}"
                 class="bg-black text-white px-4 py-2 rounded text-sm hover:bg-gray-800">
                 + Tambah Produk
