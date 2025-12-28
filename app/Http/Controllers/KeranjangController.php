@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Pesanan;
+use App\Models\PesananItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class KeranjangController extends Controller
 {
@@ -54,22 +58,36 @@ class KeranjangController extends Controller
 
     public function pesan()
     {
-        $keranjang = session()->get('keranjang', []);
+        $keranjang = session('keranjang', []);
 
-        // ❌ kalau kosong
         if (empty($keranjang)) {
-            return back()->with('error', 'Keranjang masih kosong');
+            return back()->with('error', 'Keranjang kosong');
         }
 
-        /*
-         * nanti logic pesanan:
-         * - simpan ke tabel orders
-         * - kurangi stok barang
-         */
+        $total = 0;
+        foreach ($keranjang as $item) {
+            $total += $item['harga'] * $item['qty'];
+        }
+
+        $pesanan = Pesanan::create([
+            'user_id' => Auth::id(),
+            'kode_pesanan' => 'ORD-' . strtoupper(Str::random(8)),
+            'total_harga' => $total,
+            'status' => 'menunggu_pembayaran',
+        ]);
+
+
+        foreach ($keranjang as $barangId => $item) {
+            PesananItem::create([
+                'pesanan_id' => $pesanan->id,
+                'barang_id' => $barangId,
+                'qty' => $item['qty'],
+                'harga' => $item['harga'],
+            ]);
+        }
 
         session()->forget('keranjang');
 
-        return redirect()->route('dashboard')
-            ->with('success', 'Pesanan berhasil dibuat!');
+        return redirect()->route('pesanan.show', $pesanan->id);
     }
 }

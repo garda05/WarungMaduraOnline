@@ -17,7 +17,7 @@
             <div class="flex items-center gap-6">
                 <div class="text-white text-right leading-tight">
                     <p class="font-semibold">{{ Auth::user()->name }}</p>
-                    @if(Auth::user()->role === 'penjual')
+                    @if (Auth::user()->role === 'penjual')
                         <span class="text-xs bg-white text-[#CC561E] px-2 py-0.5 rounded-full font-bold">
                             PENJUAL
                         </span>
@@ -26,12 +26,10 @@
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button
-                        type="submit"
+                    <button type="submit"
                         class="flex items-center gap-2 bg-white text-[#CC561E]
                                px-4 py-2 rounded-lg font-semibold
-                               hover:bg-gray-100 active:scale-95 transition"
-                    >
+                               hover:bg-gray-100 active:scale-95 transition">
                         <span>🚪</span>
                         <span>Keluar</span>
                     </button>
@@ -47,7 +45,7 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="flex items-center gap-4 h-14">
 
-            @if(Auth::user()->role === 'pembeli')
+            @if (Auth::user()->role === 'pembeli')
                 <!-- PEMBELI -->
                 @php
                     $menuClass = 'flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition';
@@ -56,25 +54,24 @@
                 @endphp
 
                 <a href="{{ route('dashboard') }}"
-                   class="{{ $menuClass }} {{ request()->routeIs('dashboard') ? $active : $inactive }}">
+                    class="{{ $menuClass }} {{ request()->routeIs('dashboard') ? $active : $inactive }}">
                     <span class="text-lg">📋</span> Menu
                 </a>
 
                 <a href="{{ route('keranjang.index') }}"
-                   class="{{ $menuClass }} {{ request()->routeIs('keranjang.*') ? $active : $inactive }}">
+                    class="{{ $menuClass }} {{ request()->routeIs('keranjang.*') ? $active : $inactive }}">
                     <span class="text-lg">🛒</span> Keranjang
                 </a>
 
                 <a href="{{ route('pesanan.index') }}"
-                   class="{{ $menuClass }} {{ request()->routeIs('pesanan.*') ? $active : $inactive }}">
+                    class="{{ $menuClass }} {{ request()->routeIs('pesanan.*') ? $active : $inactive }}">
                     <span class="text-lg">⚙️</span> Pesanan
                 </a>
 
                 <a href="{{ route('chat.index') }}"
-                   class="{{ $menuClass }} {{ request()->routeIs('chat.*') ? $active : $inactive }}">
+                    class="{{ $menuClass }} {{ request()->routeIs('chat.*') ? $active : $inactive }}">
                     <span class="text-lg">💬</span> Chat
                 </a>
-
             @else
                 <!-- PENJUAL -->
                 @php
@@ -84,22 +81,22 @@
                 @endphp
 
                 <a href="{{ route('dashboard') }}"
-                   class="{{ $menuClass }} {{ request()->routeIs('dashboard') ? $active : $inactive }}">
+                    class="{{ $menuClass }} {{ request()->routeIs('dashboard') ? $active : $inactive }}">
                     <span class="text-lg">🏠</span> Dashboard
                 </a>
 
                 <a href="{{ route('barang.index') }}"
-                   class="{{ $menuClass }} {{ request()->routeIs('barang.*') ? $active : $inactive }}">
+                    class="{{ $menuClass }} {{ request()->routeIs('barang.*') ? $active : $inactive }}">
                     <span class="text-lg">📦</span> Kelola Produk
                 </a>
 
-                <a href="{{ route('pesanan.index') }}"
-                   class="{{ $menuClass }} {{ request()->routeIs('pesanan.*') ? $active : $inactive }}">
+                <a href="{{ route('penjual.pesanan') }}"
+                    class="{{ $menuClass }} {{ request()->routeIs('penjual.pesanan*') ? $active : $inactive }}">
                     <span class="text-lg">📋</span> Pesanan Masuk
                 </a>
 
                 <a href="{{ route('chat.index') }}"
-                   class="{{ $menuClass }} {{ request()->routeIs('chat.*') ? $active : $inactive }}">
+                    class="{{ $menuClass }} {{ request()->routeIs('chat.*') ? $active : $inactive }}">
                     <span class="text-lg">💬</span> Chat Pelanggan
                 </a>
             @endif

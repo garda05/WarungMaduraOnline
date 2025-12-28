@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-4xl mx-auto py-12">
+    <div class="max-w-4xl mx-auto py-10">
 
         {{-- JIKA KERANJANG KOSONG --}}
         @if (empty($keranjang))
