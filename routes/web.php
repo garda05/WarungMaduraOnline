@@ -6,7 +6,8 @@ use App\Http\Controllers\{
     BarangController,
     DashboardController,
     KeranjangController,
-    PesananController
+    PesananController,
+    ChatController
 };
 
 /*
@@ -14,7 +15,6 @@ use App\Http\Controllers\{
 | PUBLIC
 |--------------------------------------------------------------------------
 */
-
 Route::get('/', fn() => view('welcome'))->name('home');
 
 /*
@@ -40,18 +40,15 @@ Route::middleware('auth')->group(function () {
     */
     Route::middleware('role:pembeli')->group(function () {
 
-        // KERANJANG
         Route::delete('/pesanan/hapus-history', [PesananController::class, 'hapusHistoryPembeli'])
-            ->middleware(['auth', 'role:pembeli'])
             ->name('pesanan.hapusHistory');
+
         Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
         Route::post('/keranjang/tambah/{barang}', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
         Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
         Route::post('/keranjang/pesan', [KeranjangController::class, 'pesan'])->name('keranjang.pesan');
 
-        // PESANAN PEMBELI
         Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan.index');
-
         Route::post('/pesanan/{pesanan}/bayar', [PesananController::class, 'konfirmasiPembayaran'])->name('pesanan.bayar');
         Route::delete('/pesanan/{pesanan}', [PesananController::class, 'batal'])->name('pesanan.batal');
     });
@@ -66,14 +63,11 @@ Route::middleware('auth')->group(function () {
     */
     Route::middleware('role:penjual')->group(function () {
 
-        // KELOLA BARANG
         Route::resource('barang', BarangController::class);
 
         Route::delete('/penjual/pesanan/hapus-history', [PesananController::class, 'hapusHistoryPenjual'])
-            ->middleware(['auth', 'role:penjual'])
             ->name('penjual.pesanan.hapusHistory');
 
-        // PESANAN MASUK
         Route::get('/penjual/pesanan', [PesananController::class, 'indexPenjual'])
             ->name('penjual.pesanan');
 
@@ -86,7 +80,8 @@ Route::middleware('auth')->group(function () {
     | CHAT
     |--------------------------------------------------------------------------
     */
-    Route::get('/chat', fn() => view('chat.index'))->name('chat.index');
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
 
     /*
     |--------------------------------------------------------------------------
@@ -98,4 +93,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

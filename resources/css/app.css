@@ -28,14 +28,12 @@ body {
     background: var(--color-background);
 }
 
-/* Login Page */
 .login-page {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 0px;
-    min-height: 820px;
+    padding: 2rem 1rem;
+    min-height: 100vh; /* 🔥 FIX UTAMA */
     background: linear-gradient(
         135deg,
         rgba(243, 207, 122, 0.1) 0%,

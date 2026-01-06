@@ -3,16 +3,32 @@
         <div class="bg-white rounded-xl shadow flex flex-col h-[500px]">
 
             <!-- CHAT AREA -->
-            <div class="flex-1 p-6 text-center text-gray-500">
-                Belum ada pesan
+            <div class="flex-1 p-6 overflow-y-auto space-y-2">
+                @forelse ($messages as $message)
+                    <div class="text-sm">
+                        <strong>{{ $message->user->name }}:</strong>
+                        {{ $message->content }}
+                    </div>
+                @empty
+                    <div class="text-center text-gray-500">
+                        Belum ada pesan
+                    </div>
+                @endforelse
             </div>
 
             <!-- INPUT -->
-            <form class="border-t p-4 flex gap-2">
+            <form
+                action="{{ route('chat.send') }}"
+                method="POST"
+                class="border-t p-4 flex gap-2"
+            >
+                @csrf
                 <input
                     type="text"
+                    name="content"
                     placeholder="Ketik pesan..."
                     class="flex-1 border rounded-lg px-4 py-2"
+                    required
                 >
                 <button class="bg-[#CC561E] text-white px-5 rounded-lg">
                     Kirim
