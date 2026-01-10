@@ -10,7 +10,9 @@ class Pesanan extends Model
         'user_id',
         'kode_pesanan',
         'status',
-        'total_harga'
+        'total_harga',
+        'hidden_by_pembeli',
+        'hidden_by_penjual',
     ];
 
     public function items()

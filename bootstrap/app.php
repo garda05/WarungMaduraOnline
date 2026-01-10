@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,10 +13,22 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+
+        // Alias middleware role
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+        ]);
+
+        // ✅ MATIKAN CSRF UNTUK PRAKTIKUM / POSTMAN
+        $middleware->web(append: [
+            VerifyCsrfToken::except([
+                'login',
+                'logout',
+                'chat/send',
+            ]),
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->create();

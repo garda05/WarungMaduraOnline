@@ -10,7 +10,7 @@ class ChatController extends Controller
 {
     public function index()
     {
-        $messages = Message::with('user')->latest()->get()->reverse();
+        $messages = Message::with('user')->oldest()->get();
         return view('chat.index', compact('messages'));
     }
 
@@ -20,11 +20,20 @@ class ChatController extends Controller
             'content' => 'required|string'
         ]);
 
-        Message::create([
+        $message = Message::create([
             'user_id' => Auth::id(),
             'content' => $request->content,
         ]);
 
+        // RESPONSE UNTUK POSTMAN / AJAX
+        if ($request->header('Accept') === 'application/json') {
+            return response()->json([
+                'success' => true,
+                'message' => $message
+            ], 200);
+        }
+
+        // RESPONSE UNTUK BROWSER
         return redirect()->route('chat.index');
     }
 }

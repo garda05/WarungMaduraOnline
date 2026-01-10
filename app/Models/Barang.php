@@ -10,11 +10,17 @@ class Barang extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'nama_barang',
         'harga',
         'stok',
         'deskripsi',
-        'foto',
         'kategori',
+        'gambar',
     ];
+
+    public function penjual()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

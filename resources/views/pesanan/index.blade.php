@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            {{-- JIKA SUDAH ADA PESANAN --}}
+        {{-- JIKA SUDAH ADA PESANAN --}}
         @else
             <div class="space-y-3">
                 @foreach ($pesanans as $pesanan)
@@ -52,7 +52,7 @@
                                 Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
                             </p>
                             <a href="{{ route('pesanan.show', $pesanan->id) }}"
-                                class="text-sm text-blue-600 hover:underline mt-1 inline-block">
+                               class="text-sm text-blue-600 hover:underline mt-1 inline-block">
                                 Lihat Detail
                             </a>
                         </div>

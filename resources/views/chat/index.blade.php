@@ -6,7 +6,7 @@
             <div class="flex-1 p-6 overflow-y-auto space-y-2">
                 @forelse ($messages as $message)
                     <div class="text-sm">
-                        <strong>{{ $message->user->name }}:</strong>
+                        <strong>{{ optional($message->user)->name ?? 'User' }}:</strong>
                         {{ $message->content }}
                     </div>
                 @empty

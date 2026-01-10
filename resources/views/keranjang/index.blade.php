@@ -13,7 +13,7 @@
                 </p>
 
                 <a href="{{ route('dashboard') }}"
-                   class="inline-block mt-6 bg-[#CC561E] text-white px-6 py-2 rounded-lg">
+                    class="inline-block mt-6 bg-[#CC561E] text-white px-6 py-2 rounded-lg">
                     Lihat Menu
                 </a>
             </div>
@@ -22,9 +22,9 @@
         @else
             <h1 class="text-2xl font-bold mb-6">Keranjang Belanja</h1>
 
-            <div class="bg-white rounded-xl shadow divide-y">
-                @php $total = 0; @endphp
+            @php $total = 0; @endphp
 
+            <div class="bg-white rounded-xl shadow divide-y">
                 @foreach ($keranjang as $id => $item)
                     @php
                         $subtotal = $item['harga'] * $item['qty'];
@@ -33,28 +33,24 @@
 
                     <div class="flex justify-between items-center p-4">
                         <div class="flex items-center gap-4">
-                            @if ($item['foto'])
-                                <img src="{{ asset('storage/'.$item['foto']) }}"
-                                     class="w-16 h-16 object-cover rounded-lg">
+                            @if (!empty($item['gambar']))
+                                <img src="{{ asset('storage/'.$item['gambar']) }}"
+                                    class="w-16 h-16 object-cover rounded-lg">
                             @endif
 
                             <div>
                                 <p class="font-semibold">{{ $item['nama'] }}</p>
-                                <p class="text-sm text-gray-500">
-                                    Qty: {{ $item['qty'] }}
-                                </p>
+                                <p class="text-sm text-gray-500">Qty: {{ $item['qty'] }}</p>
                                 <p class="text-sm font-semibold text-[#CC561E]">
                                     Rp {{ number_format($subtotal, 0, ',', '.') }}
                                 </p>
                             </div>
                         </div>
 
-                        {{-- HAPUS --}}
                         <form action="{{ route('keranjang.hapus', $id) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button
-                                class="text-red-600 text-sm hover:underline">
+                            <button class="text-red-600 text-sm hover:underline">
                                 Hapus
                             </button>
                         </form>
@@ -74,11 +70,12 @@
                 <form action="{{ route('keranjang.pesan') }}" method="POST">
                     @csrf
                     <button
-                        class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition">
+                        class="bg-[#CC561E] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#B84C1A] transition">
                         Pesan Sekarang
                     </button>
                 </form>
             </div>
         @endif
+
     </div>
 </x-app-layout>

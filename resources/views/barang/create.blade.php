@@ -8,7 +8,7 @@
 
             <div>
                 <label class="font-semibold">Foto Produk</label>
-                <input type="file" name="foto"
+                <input type="file" name="gambar"
                     class="mt-1 block w-full border rounded-lg p-2">
             </div>
 

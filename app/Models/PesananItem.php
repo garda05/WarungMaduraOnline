@@ -10,7 +10,7 @@ class PesananItem extends Model
         'pesanan_id',
         'barang_id',
         'qty',
-        'harga'
+        'harga',
     ];
 
     public function barang()

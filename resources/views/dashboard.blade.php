@@ -62,8 +62,8 @@
                     <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden relative">
 
                         <!-- FOTO -->
-                        @if ($barang->foto)
-                            <img src="{{ asset('storage/' . $barang->foto) }}" class="w-full h-48 object-cover">
+                        @if ($barang->gambar)
+                            <img src="{{ asset('storage/' . $barang->gambar) }}" class="w-full h-48 object-cover">
                         @else
                             <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
                                 <span class="text-4xl">📦</span>

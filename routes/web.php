@@ -40,19 +40,29 @@ Route::middleware('auth')->group(function () {
     */
     Route::middleware('role:pembeli')->group(function () {
 
-        Route::delete('/pesanan/hapus-history', [PesananController::class, 'hapusHistoryPembeli'])
-            ->name('pesanan.hapusHistory');
-
         Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
         Route::post('/keranjang/tambah/{barang}', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
         Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
         Route::post('/keranjang/pesan', [KeranjangController::class, 'pesan'])->name('keranjang.pesan');
 
         Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan.index');
-        Route::post('/pesanan/{pesanan}/bayar', [PesananController::class, 'konfirmasiPembayaran'])->name('pesanan.bayar');
-        Route::delete('/pesanan/{pesanan}', [PesananController::class, 'batal'])->name('pesanan.batal');
+
+        // ✅ FIX: route statis HARUS di atas route parameter
+        Route::delete('/pesanan/hapus-history', [PesananController::class, 'hapusHistoryPembeli'])
+            ->name('pesanan.hapusHistory');
+
+        Route::post('/pesanan/{pesanan}/bayar', [PesananController::class, 'konfirmasiPembayaran'])
+            ->name('pesanan.bayar');
+
+        Route::delete('/pesanan/{pesanan}', [PesananController::class, 'batal'])
+            ->name('pesanan.batal');
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | PESANAN DETAIL (UMUM)
+    |--------------------------------------------------------------------------
+    */
     Route::get('/pesanan/{pesanan}', [PesananController::class, 'show'])
         ->name('pesanan.show');
 
@@ -65,14 +75,14 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('barang', BarangController::class);
 
-        Route::delete('/penjual/pesanan/hapus-history', [PesananController::class, 'hapusHistoryPenjual'])
-            ->name('penjual.pesanan.hapusHistory');
-
         Route::get('/penjual/pesanan', [PesananController::class, 'indexPenjual'])
             ->name('penjual.pesanan');
 
         Route::patch('/penjual/pesanan/{pesanan}/status', [PesananController::class, 'updateStatus'])
             ->name('pesanan.updateStatus');
+
+        Route::delete('/penjual/pesanan/hapus-history', [PesananController::class, 'hapusHistoryPenjual'])
+            ->name('penjual.pesanan.hapusHistory');
     });
 
     /*
@@ -81,7 +91,10 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+
+    Route::post('/chat/send', [ChatController::class, 'send'])
+        ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])
+        ->name('chat.send');
 
     /*
     |--------------------------------------------------------------------------
@@ -93,4 +106,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+/*
+|--------------------------------------------------------------------------
+| DEBUG
+|--------------------------------------------------------------------------
+*/
+Route::get('/whoami', function () {
+    return auth()->user();
+})->middleware('auth');

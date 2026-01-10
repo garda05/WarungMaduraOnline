@@ -27,9 +27,10 @@ class PesananController extends Controller
     public function indexPenjual()
     {
         $pesanans = Pesanan::whereHas('items.barang', function ($q) {
-            $q->where('user_id', Auth::id()); // ⬅️ FIX DI SINI
+            $q->where('user_id', Auth::id()); // ⬅️ KONSISTEN
         })
             ->where('hidden_by_penjual', false)
+            ->with(['items.barang', 'user'])
             ->latest()
             ->get();
 
@@ -129,14 +130,17 @@ class PesananController extends Controller
     // =========================
     public function hapusHistoryPenjual()
     {
-        Pesanan::where('status', 'selesai')
+        Pesanan::where('hidden_by_penjual', false)
+            ->where('status', 'selesai')
             ->whereHas('items.barang', function ($q) {
-                $q->where('penjual_id', Auth::id());
+                $q->where('user_id', Auth::id());
             })
             ->update([
                 'hidden_by_penjual' => true
             ]);
 
-        return back()->with('success', 'Riwayat pesanan disembunyikan');
-    }
+        return redirect()
+            ->route('penjual.pesanan')
+            ->with('success', 'Riwayat pesanan disembunyikan');
+        }
 }

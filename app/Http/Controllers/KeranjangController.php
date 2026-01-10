@@ -34,7 +34,7 @@ class KeranjangController extends Controller
             $keranjang[$barang->id] = [
                 'nama' => $barang->nama_barang,
                 'harga' => $barang->harga,
-                'foto' => $barang->foto,
+                'gambar' => $barang->gambar,
                 'qty' => $qty,
             ];
         }
@@ -84,6 +84,8 @@ class KeranjangController extends Controller
                 'qty' => $item['qty'],
                 'harga' => $item['harga'],
             ]);
+            
+            Barang::where('id', $barangId)->decrement('stok', $item['qty']);
         }
 
         session()->forget('keranjang');
