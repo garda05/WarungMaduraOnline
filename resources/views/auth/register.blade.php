@@ -38,7 +38,6 @@
                 <select name="role" id="role"
                     class="block w-full mt-1 rounded-lg border-gray-300
                     focus:border-[#CC561E] focus:ring-[#CC561E]">
-                    <option value="pelanggan">Pelanggan</option>
                     <option value="pembeli">Pembeli</option>
                     <option value="penjual">Penjual</option>
                 </select>

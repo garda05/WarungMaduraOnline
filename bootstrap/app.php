@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'chat/send',
             'keranjang/*',
             'pesanan/*',
+            'penjual/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
