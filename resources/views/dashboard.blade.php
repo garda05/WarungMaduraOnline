@@ -59,7 +59,8 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
 
                 @forelse($barangs as $barang)
-                    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden relative">
+                    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden relative"
+                        data-testid="product-card" data-product-name="{{ $barang->nama_barang }}">
 
                         <!-- FOTO -->
                         @if ($barang->gambar)
@@ -118,7 +119,7 @@
                                         <input type="hidden" name="qty" id="qty-hidden-{{ $barang->id }}"
                                             value="1">
 
-                                        <button onclick="syncQty({{ $barang->id }})"
+                                        <button onclick="syncQty({{ $barang->id }})" data-testid="add-to-cart"
                                             class="w-full border border-green-500 text-green-600 rounded-lg py-2
                        text-sm font-semibold hover:bg-green-50 transition">
                                             + Keranjang

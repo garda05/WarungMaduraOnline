@@ -49,11 +49,15 @@ class BarangController extends Controller
 
     public function edit(Barang $barang)
     {
+        $this->authorizeOwner($barang);
+
         return view('barang.edit', compact('barang'));
     }
 
     public function update(Request $request, Barang $barang)
     {
+        $this->authorizeOwner($barang);
+
         $validated = $request->validate([
             'nama_barang' => 'required|string|max:255',
             'harga'       => 'required|numeric|min:0',
@@ -81,6 +85,8 @@ class BarangController extends Controller
 
     public function destroy(Barang $barang)
     {
+        $this->authorizeOwner($barang);
+
         if ($barang->gambar) {
             Storage::disk('public')->delete($barang->gambar);
         }
@@ -88,5 +94,10 @@ class BarangController extends Controller
         $barang->delete();
 
         return back()->with('success', 'Barang berhasil dihapus');
+    }
+
+    private function authorizeOwner(Barang $barang): void
+    {
+        abort_unless($barang->user_id === auth()->id(), 403);
     }
 }

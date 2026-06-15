@@ -19,6 +19,9 @@
 /storage/*.key
 /storage/pail
 /vendor
+/selenium-tests/.venv
+/selenium-tests/.pytest_cache
+/selenium-tests/__pycache__
 Homestead.json
 Homestead.yaml
 Thumbs.db

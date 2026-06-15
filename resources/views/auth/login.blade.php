@@ -12,7 +12,7 @@
             <!-- Session Status -->
             <x-auth-session-status class="mb-4" :status="session('status')" />
 
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('login') }}" data-testid="login-form">
                 @csrf
 
                 <!-- Email Address -->
@@ -62,7 +62,7 @@
 
                 <!-- Actions -->
                 <div class="flex flex-col gap-4">
-                    <button type="submit" class="btn-primary w-full">
+                    <button type="submit" class="btn-primary w-full" data-testid="login-submit">
                         Masuk
                     </button>
 

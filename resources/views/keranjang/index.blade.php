@@ -67,9 +67,9 @@
                     </span>
                 </p>
 
-                <form action="{{ route('keranjang.pesan') }}" method="POST">
+                <form action="{{ route('keranjang.pesan') }}" method="POST" data-testid="checkout-form">
                     @csrf
-                    <button
+                    <button data-testid="checkout-submit"
                         class="bg-[#CC561E] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#B84C1A] transition">
                         Pesan Sekarang
                     </button>

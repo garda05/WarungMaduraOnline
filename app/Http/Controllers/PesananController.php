@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PesananController extends Controller
 {
@@ -47,6 +48,10 @@ class PesananController extends Controller
             abort(403);
         }
 
+        if (Auth::user()->role === 'penjual') {
+            $this->authorizeSellerOrder($pesanan);
+        }
+
         // arahkan view sesuai role
         if (Auth::user()->role === 'penjual') {
             return view('penjual.pesanan.show', compact('pesanan'));
@@ -80,9 +85,22 @@ class PesananController extends Controller
     // =========================
     public function updateStatus(Request $request, Pesanan $pesanan)
     {
+        $this->authorizeSellerOrder($pesanan);
+
         $request->validate([
             'status' => 'required|in:sedang_disiapkan,sedang_dikirim,selesai'
         ]);
+
+        $allowedTransitions = [
+            'sedang_disiapkan' => 'sedang_dikirim',
+            'sedang_dikirim' => 'selesai',
+        ];
+
+        abort_unless(
+            ($allowedTransitions[$pesanan->status] ?? null) === $request->status,
+            422,
+            'Transisi status pesanan tidak valid.'
+        );
 
         $pesanan->update([
             'status' => $request->status
@@ -104,7 +122,15 @@ class PesananController extends Controller
             return back();
         }
 
-        $pesanan->delete();
+        DB::transaction(function () use ($pesanan) {
+            $pesanan->load('items.barang');
+
+            foreach ($pesanan->items as $item) {
+                $item->barang?->increment('stok', $item->qty);
+            }
+
+            $pesanan->delete();
+        });
 
         return redirect()
             ->route('pesanan.index')
@@ -142,5 +168,14 @@ class PesananController extends Controller
         return redirect()
             ->route('penjual.pesanan')
             ->with('success', 'Riwayat pesanan disembunyikan');
-        }
+    }
+
+    private function authorizeSellerOrder(Pesanan $pesanan): void
+    {
+        $ownsItem = $pesanan->items()
+            ->whereHas('barang', fn ($query) => $query->where('user_id', Auth::id()))
+            ->exists();
+
+        abort_unless($ownsItem, 403);
+    }
 }

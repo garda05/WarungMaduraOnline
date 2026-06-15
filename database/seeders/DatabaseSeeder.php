@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Barang;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,11 +16,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $penjual = User::updateOrCreate([
+            'email' => 'penjual@warung.test',
+        ], [
+            'name' => 'Penjual Selenium',
+            'email_verified_at' => now(),
+            'password' => 'password123',
+            'role' => 'penjual',
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::updateOrCreate([
+            'email' => 'pembeli@warung.test',
+        ], [
+            'name' => 'Pembeli Selenium',
+            'email_verified_at' => now(),
+            'password' => 'password123',
+            'role' => 'pembeli',
+        ]);
+
+        Barang::updateOrCreate([
+            'user_id' => $penjual->id,
+            'nama_barang' => 'Kopi Madura Selenium',
+        ], [
+            'harga' => 12000,
+            'stok' => 100,
+            'deskripsi' => 'Produk stabil untuk pengujian otomatis.',
+            'kategori' => 'minuman',
         ]);
     }
 }

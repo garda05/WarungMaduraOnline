@@ -3,6 +3,7 @@
         <h1 class="text-2xl font-bold mb-6">Tambah Produk</h1>
 
         <form method="POST" action="{{ route('barang.store') }}" enctype="multipart/form-data"
+              data-testid="product-form"
               class="bg-white p-6 rounded-xl shadow space-y-4">
             @csrf
 
@@ -46,7 +47,7 @@
                     class="w-full border rounded-lg p-2"></textarea>
             </div>
 
-            <button class="bg-[#CC561E] text-white px-6 py-2 rounded-lg">
+            <button class="bg-[#CC561E] text-white px-6 py-2 rounded-lg" data-testid="product-submit">
                 Simpan Produk
             </button>
         </form>

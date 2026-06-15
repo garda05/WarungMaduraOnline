@@ -8,6 +8,7 @@ use App\Models\PesananItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class KeranjangController extends Controller
 {
@@ -19,14 +20,16 @@ class KeranjangController extends Controller
 
     public function tambah(Request $request, Barang $barang)
     {
-        $qty = (int) $request->qty;
+        $validated = $request->validate([
+            'qty' => ['required', 'integer', 'min:1'],
+        ]);
+        $qty = (int) $validated['qty'];
+        $keranjang = session()->get('keranjang', []);
+        $qtyDiKeranjang = $keranjang[$barang->id]['qty'] ?? 0;
 
-        // validasi stok
-        if ($qty > $barang->stok) {
+        if ($qtyDiKeranjang + $qty > $barang->stok) {
             return back()->with('error', 'Qty melebihi stok');
         }
-
-        $keranjang = session()->get('keranjang', []);
 
         if (isset($keranjang[$barang->id])) {
             $keranjang[$barang->id]['qty'] += $qty;
@@ -64,29 +67,39 @@ class KeranjangController extends Controller
             return back()->with('error', 'Keranjang kosong');
         }
 
-        $total = 0;
-        foreach ($keranjang as $item) {
-            $total += $item['harga'] * $item['qty'];
-        }
+        $pesanan = DB::transaction(function () use ($keranjang) {
+            $items = [];
+            $total = 0;
 
-        $pesanan = Pesanan::create([
-            'user_id' => Auth::id(),
-            'kode_pesanan' => 'ORD-' . strtoupper(Str::random(8)),
-            'total_harga' => $total,
-            'status' => 'menunggu_pembayaran',
-        ]);
+            foreach ($keranjang as $barangId => $item) {
+                $barang = Barang::query()->lockForUpdate()->findOrFail($barangId);
+                $qty = (int) $item['qty'];
 
+                abort_if($qty < 1 || $qty > $barang->stok, 422, 'Stok barang tidak mencukupi.');
 
-        foreach ($keranjang as $barangId => $item) {
-            PesananItem::create([
-                'pesanan_id' => $pesanan->id,
-                'barang_id' => $barangId,
-                'qty' => $item['qty'],
-                'harga' => $item['harga'],
+                $items[] = compact('barang', 'qty');
+                $total += $barang->harga * $qty;
+            }
+
+            $pesanan = Pesanan::create([
+                'user_id' => Auth::id(),
+                'kode_pesanan' => 'ORD-' . strtoupper(Str::random(8)),
+                'total_harga' => $total,
+                'status' => 'menunggu_pembayaran',
             ]);
-            
-            Barang::where('id', $barangId)->decrement('stok', $item['qty']);
-        }
+
+            foreach ($items as ['barang' => $barang, 'qty' => $qty]) {
+                PesananItem::create([
+                    'pesanan_id' => $pesanan->id,
+                    'barang_id' => $barang->id,
+                    'qty' => $qty,
+                    'harga' => $barang->harga,
+                ]);
+                $barang->decrement('stok', $qty);
+            }
+
+            return $pesanan;
+        });
 
         session()->forget('keranjang');
 

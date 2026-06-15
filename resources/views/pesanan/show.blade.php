@@ -23,9 +23,9 @@
             </p>
 
             @if ($pesanan->status === 'menunggu_pembayaran')
-                <form action="{{ route('pesanan.bayar', $pesanan->id) }}" method="POST">
+                <form action="{{ route('pesanan.bayar', $pesanan->id) }}" method="POST" data-testid="payment-form">
                     @csrf
-                    <button class="bg-[#CC561E] text-white px-6 py-2 rounded-lg">
+                    <button class="bg-[#CC561E] text-white px-6 py-2 rounded-lg" data-testid="payment-submit">
                         Konfirmasi Pembayaran
                     </button>
                 </form>
